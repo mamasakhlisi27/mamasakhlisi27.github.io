@@ -1,16 +1,47 @@
-const signInBtn = document.getElementById("signIn");
-const signUpBtn = document.getElementById("signUp");
-const fistForm = document.getElementById("form1");
-const secondForm = document.getElementById("form2");
-const container = document.querySelector(".container");
+document.addEventListener("DOMContentLoaded", async function() {
+    const blogList = document.getElementById("blog-list");
+    const addButton = document.getElementById("add-button");
+    const blogDetails = document.getElementById("blog-details");
+    const detailTitle = document.getElementById("detail-title");
+    const detailContent = document.getElementById("detail-content");
+    const detailDate = document.getElementById("detail-date");
 
-signInBtn.addEventListener("click", () => {
-	container.classList.remove("right-panel-active");
+    async function getBlogs() {
+        try {
+            const response = await fetch('https://raw.githubusercontent.com/mamasakhlisi27/mamasakhlisi27.github.io/main/blogs.json');
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching blogs:', error);
+            return [];
+        }
+    }
+
+    async function renderBlogList() {
+        const blogs = await getBlogs();
+
+        blogList.innerHTML = "";
+        blogs.forEach((blog, index) => {
+            const blogElement = document.createElement("div");
+            blogElement.className = "blog-entry";
+            blogElement.innerHTML = `
+                <h2>${blog.title}</h2>
+                <p class="blog-date">${blog.date}</p>
+                <p>${blog.content}</p>
+            `;
+            blogElement.addEventListener("click", () => showBlogDetails(index));
+            blogList.appendChild(blogElement);
+        });
+    }
+
+    function showBlogDetails(index) {
+        // Implementar la función para mostrar los detalles del blog
+    }
+
+    addButton.addEventListener("click", async () => {
+        // Implementar la lógica para añadir un nuevo blog
+        // y guardar los cambios en el archivo JSON
+    });
+
+    renderBlogList();
 });
-
-signUpBtn.addEventListener("click", () => {
-	container.classList.add("right-panel-active");
-});
-
-fistForm.addEventListener("submit", (e) => e.preventDefault());
-secondForm.addEventListener("submit", (e) => e.preventDefault());
